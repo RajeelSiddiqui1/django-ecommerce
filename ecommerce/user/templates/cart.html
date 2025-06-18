@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    MRS Store - Shopping Cart
+{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+<div class="container my-5">
+    {% if messages %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row text-center mb-4">
+        <h1 class="display-4 fw-bold text-dark">Your Shopping Cart</h1>
+        <p class="lead text-muted">Review your items before checkout</p>
+    </div>
+
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            {% for item in cart_items %}
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-3">
+                        <img src="{{ item.product.photos.url|default:'/static/images/placeholder.jpg' }}"
+                             class="img-fluid rounded-start"
+                             alt="{{ item.product.name|escape }}"
+                             style="object-fit: cover; height: 150px;">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title fw-semibold">{{ item.product.name|title }}</h5>
+                            <p class="text-muted">{{ item.product.description|truncatechars:50 }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    {# Use direct links to the views #}
+                                    <a href="{% url 'increase_item' item.id %}" class="btn btn-outline-secondary btn-sm">+</a>
+                                    <span class="mx-3">{{ item.quantity }}</span>
+                                    <a href="{% url 'decrease_quantity' item.id %}" class="btn btn-outline-secondary btn-sm">-</a>
+                                </div>
+                                <p class="fw-bold mb-0">${{ item.total_price|floatformat:2 }}</p>
+                            </div>
+                            <a href="{% url 'remove_from_cart' item.id %}"
+                               class="btn btn-danger btn-sm mt-2">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <h4 class="fw-semibold">Order Summary</h4>
+                    <hr>
+                    <p class="d-flex justify-content-between">
+                        <span>Total</span>
+                        <span class="fw-bold">${{ total|floatformat:2 }}</span>
+                    </p>
+                    <a href="{% url 'checkout_view' %}"
+                       class="btn btn-primary w-100 rounded-pill">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center my-5">
+        <h5 class="text-muted">Your cart is empty.</h5>
+        <a href="{% url 'home_page' %}" class="btn btn-outline-primary mt-3">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+{# Remove the <script> tag for AJAX if you're using full page reloads #}
+{# The style block can remain if it's for visual effects only #}
+<style>
+    .transition-transform {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

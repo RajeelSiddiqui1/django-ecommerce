@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Admin Login
+{% endblock %}
+
+{% block content %}
+<div class="conatiner">
+    <div class="row my-5">
+        <h1 class="text-center">Admin Login</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <form method="post">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button type='submit' class="btn btn-primary w-100">Login</button>
+          </form>
+          {% comment %} <p class='text-center' {% url 'admin_signup' %}>Signup</p> {% endcomment %}
+        </div>
+    </div>
+</div>
+{% endblock %}

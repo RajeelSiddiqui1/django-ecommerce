@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+dashboard
+{% endblock %}
+{% block content %}
+<h1 class="my-5 text-center">Hi Welcome to Dashboard</h1>
+<div class="row justify-content-center">
+{% if request.session.admin_id %}
+<div class="row justify-content-center">
+    <div class="col-md-3">
+        <a href="{% url 'admin_logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+{% else %}
+<div class="row justify-content-center">
+    <div class="col-md-3 mx-3">
+        <a href="{% url 'admin_login' %}" class="btn btn-success">Login</a>
+    </div>
+    <div class="col-md-3 mx-3">
+        <a href="{% url 'login' %}" class="btn btn-warning">Website</a>
+    </div>
+</div>
+{% endif %}
+<div class="row justify-content-center">
+<div class="col-md-4 my-3">
+    <div class="card">
+  <div class="card-body justify-content-center">
+    <h5 class="card-title">Category Of Product</h5>
+    <a href="{% url 'category_list' %}" class="btn btn-info">Check</a>
+  </div>
+</div>
+</div>
+
+<div class="col-md-4 my-3">
+    <div class="card">
+  <div class="card-body justify-content-center">
+    <h5 class="card-title">List Of Product</h5>
+    <a href="{% url 'product_list' %}" class="btn btn-info">Check</a>
+  </div>
+</div>
+</div>
+
+<div class="col-md-4 my-3">
+    <div class="card">
+   <div class="card-body justify-content-center">
+    <h5 class="card-title">List Of Order History</h5>
+    <a href="{% url 'admin_order_history' %}" class="btn btn-info">Order History</a>
+  </div>
+</div>
+</div>
+
+<div class="col-md-4 my-3">
+    <div class="card">
+   <div class="card-body justify-content-center">
+    <h5 class="card-title">List Of User</h5>
+    <a href="{% url 'user_list' %}" class="btn btn-info">Users</a>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Product Form
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mt-4">
+        <h1>
+            {% if form.instance.pk %}
+                Edit Product
+            {% else %}
+                Create Product
+            {% endif %}
+        </h1>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6 col-lg-5">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if form.instance.pk and form.instance.images.exists %}
+                    <div class="mb-4 text-center">
+                        <label class="form-label fw-medium">Current Primary Image:</label><br>
+                        <img 
+                            src="{% if form.instance.get_primary_image %}{{ form.instance.get_primary_image.url }}{% else %}/static/placeholder.jpg{% endif %}" 
+                            alt="Product Primary Image" 
+                            class="img-fluid border rounded shadow-sm" 
+                            style="max-height: 200px; object-fit: cover;"
+                        >
+                    </div>
+                {% endif %}
+
+                {{ form.as_p }}
+                
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 py-2 fw-medium">
+                        {% if form.instance.pk %}Update{% else %}Create{% endif %}
+                    </button>
+                    <a href="{% url 'product_list' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-5 py-2 fw-medium">
+                        Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

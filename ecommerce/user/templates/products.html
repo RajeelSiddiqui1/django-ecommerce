@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    MRS Store - {{ products.name|default:"Products" }}
+{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+<div class="container my-5">
+      {% if messages %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="row text-center mb-4">
+        <h1 class="display-4 fw-bold text-dark">Welcome to MRS Store</h1>
+        <p class="lead text-muted">Discover our exclusive collection of premium products</p>
+    </div>
+   
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for pd in products %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden transition-transform hover-scale">
+                <div class="position-relative">
+                    <img src="{{ pd.photos.url|default:'/static/images/placeholder.jpg' }}"
+                         class="card-img-top"
+                         alt="{{ pd.name|escape }}"
+                         style="object-fit: cover; height: 250px; width: 100%;">
+                    {% if pd.discount %}
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">Save {{ pd.discount }}%</span>
+                    {% endif %}
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-semibold text-info mb-2">{{ pd.name|title }}</h5>
+                    <p class="card-text text-muted text-centerz flex-grow-1">{{ pd.description|truncatechars:60 }}</p>
+                    <div class="mt-auto">
+                        <p class="fw-bold text-primary mb-2">
+                            ${{ pd.price|floatformat:2 }}
+                            {% if pd.original_price %}
+                            <small class="text-muted text-decoration-line-through">${{ pd.original_price|floatformat:2 }}</small>
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'product_detail' pd.id %}"
+                           class="btn btn-primary w-100 rounded-pill fw-medium">
+                            View Details
+                        </a> 
+                     <a href="{% url 'add_to_cart' pd.id %}"
+                        class="btn btn-warning w-100 my-1 rounded-pill fw-medium">
+                            Add to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center justify-content-center my-5">
+            <h5 class="text-muted">No products found in this category.</h5>
+            <a href="{% url 'home_page' %}" class="btn btn-outline-primary mt-3">Back to Home</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .transition-transform {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+        transform: scale(1.03);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    .card-img-top {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+</style>
+{% endblock %}

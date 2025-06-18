@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Category List
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row text-center">
+      <h1>Category List</h1>
+      </div>
+      {% if messages %}
+        <div class="row">
+            <div class="col-md-12">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+      <div class="row  d-flex justify-content-end">
+         <div class="col-md-3">
+     <a href="{% url 'category_create' %}" class="btn btn-info">Create</a>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Image</th>
+      <th scope="col">Created at</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+        {% for cat in category %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{cat.name}}</td>
+      <td><img src="{{cat.photo.url}}"  alt="category image" class="img-fluid border rounded" style="max-height: 100px; width:100px;"></td>
+      <td>{{cat.created_at}}</td>
+      <td>
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'category_edit' cat.id %}" class="btn btn-warning">
+                Edit
+            </a>
+            <a href="{% url 'category_delete' cat.id %}" class="btn btn-danger">
+                Delete
+            </a>
+      </div>
+    </td>
+    </tr>
+    {% empty %}
+    <div class="text-center mt-4">
+        <p>No category available. Be the first to <span style="font-size: 24px; color:green; font-size:900;">&#8599;</span></p>
+        </div>
+     {% endfor %}
+  </tbody>
+</table>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center my-3">
+        <div class="col-md-3">
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

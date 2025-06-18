@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Product List
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row text-center">
+        <h1>Product List</h1>
+    </div>
+    {% if messages %}
+        <div class="row">
+            <div class="col-md-12">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="row d-flex justify-content-end">
+        <div class="col-md-3">
+            <a href="{% url 'create_product' %}" class="btn btn-info">Create</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-11">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">In Stock</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Created at</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ product.name }}</td>
+                        <td>${{ product.price }}</td>
+                        <td>{{ product.sku }}</td>
+                        <td>{{ product.in_stock }}</td>
+                        <td>{{ product.discount }}</td>
+                        <td><img src="{{product.photos.url}}"  alt="category image" class="img-fluid border rounded" style="max-height: 100px;"></td>
+                        <td>{{ product.created_at }}</td>
+                        {% comment %} <td>
+                            <form method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                {{ status_form.action }}
+                                <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                            </form>
+                        </td> {% endcomment %}
+                        <td>
+                            <div class="d-flex justify-content-between ">
+                                <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm mx-2">Edit</a>
+                                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm mx-2">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center mt-4">
+                            <p>No products available. Be the first to <a href="{% url 'create_product' %}" style="font-size: 24px; color:green; font-weight:900;">↗</a></p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center my-3">
+        <div class="col-md-3">
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
